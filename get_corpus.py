@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from login import *
-from util  import *
+from fb_util  import *
 
 def execute():
     token = login()
@@ -17,7 +17,7 @@ def execute():
     #dumpGrouplist(graph, "groups.txt")
 
 	# Get uploaded photos	
-    dumpPhotos(graph, "my_photo_corpus_tagged",5000)
+    dumpPhotos(graph, "my_photo_corpus_uploaded",5000)
 
 if __name__=="__main__":
    execute()

@@ -23,13 +23,13 @@ def append_photo_feats(fname,dataset):
       Returns
         n_feat: # of feats of the photo.
     '''
-    f = imread(fname,as_grey=Ture)
+    f = mh.imread(fname,as_grey=True)
     spoints = surf.surf(f, descriptor_only=True)
     for feat in spoints.tolist():
         dataset.append(feat)
     return spoints.shape[0]
 
-def exec():
+def execute():
     dataset=[]
     feat_len_of_photos=[]
     prefix = 'my_photo_corpus_uploaded/{0}/'
@@ -57,3 +57,5 @@ def exec():
                 f.write('{0} {1}\n'.format(k,v))
         begin=end
 
+if __name__=="__main__":
+    execute()

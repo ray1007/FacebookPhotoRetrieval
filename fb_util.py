@@ -1,6 +1,7 @@
 import os
 import urllib
 import shutil
+import pdb
 
 def isChinese(str):
    if(str >= u'\u4e00' and str <= u'\u9fff'):
@@ -24,8 +25,9 @@ def dumpPhotos(graph, file_prefix, maxNum=-1):
     if os.path.exists(file_prefix):
         shutil.rmtree(file_prefix)
     os.makedirs(file_prefix)
-    photo_fetcher = urllib.URLopener()
+    #photo_fetcher = urllib.URLopener()
     keep = True
+    annotated = 0
     print("Fetching uploaded photos...")
     while(keep):
         nextPage = None
@@ -41,13 +43,23 @@ def dumpPhotos(graph, file_prefix, maxNum=-1):
                 shutil.rmtree(dir_name)
             os.mkdir(dir_name)
             if 'name' in photo: # Photo is annotated.
+                annotated += 1
                 with open('{0}/anno'.format(dir_name),'w') as f:
                     f.write(photo['name'].encode('utf-8'))
+            url = ''
+            delta = float('inf')
             for img in photo['images']:
                 if 'p480x480' in img['source']:
-                    photo_fetcher.retrieve(
+                    urllib.urlretrieve(
                         img['source'],
                         "{0}/{1}.jpg".format(dir_name,count))
+                elif abs(img['width']-480) < delta:
+                    delta = abs(img['width']-480)
+                    url = img['source']
+            if not os.path.isfile("{0}/{1}.jpg".format(dir_name,count)):
+                urllib.urlretrieve(
+                    url,
+                    "{0}/{1}.jpg".format(dir_name,count))
             if maxNum != -1 and count >= maxNum:
                 keep = False
                 break
@@ -57,7 +69,7 @@ def dumpPhotos(graph, file_prefix, maxNum=-1):
 			    "me", "photos",
                 fields='images,name', type="uploaded",
                 after=nextPage, offset=count, limit=200)
-    print("Done!")
+    print("Done! {0} annotated in {1} photos.".format(annotated, count))
 
 #
 
