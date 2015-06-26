@@ -4,9 +4,10 @@ import os
 # 3rd-party packages
 import mahotas as mh
 from mahotas.features import surf
+import milk
 
 # local packages
-import kmeans
+#import kmeans
 
 # global vars
 SIZE_OF_CORPUS = 5000
@@ -39,13 +40,20 @@ def execute():
             (prefix+'{0}.jpg').format(i+1), dataset
         )
         feat_len_of_photos.append(l)
-
-    labels = kmeans.kmeans(NUM_OF_VISUAL, np.array(dataset))
+    '''
+    p=len(dataset)
+    n=len(dataset[0])
+    dataset_m = np.memmap('dataset.tmp',dtype='float32',mode='w+',shape=(p,n))
+    dataset_m[:] = np.concatenate(dataset,axis=0)
+    del dataset
+    '''
+    #labels = kmeans.kmeans(NUM_OF_VISUAL, np.array(dataset))
+    labels, _ = milk.kmeans(dataset_m, NUM_OF_VISUAL)
 
     begin = 0
     end = 0
-    #for i in xrange(SIZE_OF_CORPUS):
-    for i in xrange(2):
+    #for i in xrange(2):
+    for i in xrange(SIZE_OF_CORPUS):
         end = begin + feat_len_of_photos[i]
         freq = {}
         for l in lables[begin:end] :
