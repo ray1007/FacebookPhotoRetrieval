@@ -58,5 +58,5 @@ if __name__ == '__main__':
     check_argv()
     prefix = sys.argv[1]
     DICT_PATH = sys.argv[2]
-    for i in xrange(5):    
+    for i in xrange(5000):    
         gen_anno_word_id((prefix+'/{0}/').format(i+1))
