@@ -65,7 +65,7 @@ def dumpPhotos(graph, file_prefix, maxNum=-1):
                 break
         print("   processed {0} photos".format(count) )
         if(nextPage != None):
-            friends_json = graph.get_connections(
+            photos_json = graph.get_connections(
 			    "me", "photos",
                 fields='images,name', type="uploaded",
                 after=nextPage, offset=count, limit=200)
