@@ -1,13 +1,16 @@
 # built-in packages
 import os
+import time
 
 # 3rd-party packages
 import mahotas as mh
 from mahotas.features import surf
-import milk
+#import milk
+import numpy as np
+from sklearn.cluster import KMeans
 
 # local packages
-#import kmeans
+import kmeans
 
 # global vars
 SIZE_OF_CORPUS = 5000
@@ -34,22 +37,32 @@ def execute():
     dataset=[]
     feat_len_of_photos=[]
     prefix = 'my_photo_corpus_uploaded/{0}/'
-    
+    t1=time.time()
     for i in xrange(SIZE_OF_CORPUS):
         l = append_photo_feats(
             (prefix+'{0}.jpg').format(i+1), dataset
         )
         feat_len_of_photos.append(l)
-    '''
+    t2=time.time()
+    print("finished reading feats. time elapsed:{0}".format(t2-t1))
     p=len(dataset)
     n=len(dataset[0])
     dataset_m = np.memmap('dataset.tmp',dtype='float32',mode='w+',shape=(p,n))
-    dataset_m[:] = np.concatenate(dataset,axis=0)
+    dataset_m[:] = np.array(dataset)[:]
     del dataset
+    print("start kmeans.")
+    t1=time.time()
+    labels = kmeans.kmeans(NUM_OF_VISUAL, dataset_m)
+    #labels, _ = milk.kmeans(dataset_m, NUM_OF_VISUAL)
+    
     '''
-    #labels = kmeans.kmeans(NUM_OF_VISUAL, np.array(dataset))
-    labels, _ = milk.kmeans(dataset_m, NUM_OF_VISUAL)
-
+    estimator = KMeans(n_clusters=NUM_OF_VISUAL)
+    estimator.fit(dataset_m)
+    labels = estimator.labels_
+    '''
+    #pdb.set_trace()
+    t2=time.time()
+    print("finished kmeans. time elapsed:{0}".format(t2-t1))
     begin = 0
     end = 0
     #for i in xrange(2):

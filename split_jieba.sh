@@ -1,6 +1,7 @@
 
 prog=jieba1.0.py
-for i in {1..10}
+CORPUS_SIZE=5000
+for (( i=1; i<=$CORPUS_SIZE; i++ ))
 do
 echo "idx: $i "
 target="./my_photo_corpus_uploaded/"${i}"/anno" 

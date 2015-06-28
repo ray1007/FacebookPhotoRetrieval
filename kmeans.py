@@ -42,6 +42,7 @@ def kmeans(k, dataset, eps=0.00001):
 
         distance_sum = 0;
         for i in xrange(k):
+            if len(groups[i]): pdb.set_trace()
             g = np.array(groups[i])
             codebook[i] = np.mean(g, axis=0)
             tmp = np.tile(codebook[i], (g.shape[0],1))
@@ -49,6 +50,7 @@ def kmeans(k, dataset, eps=0.00001):
             distance_sum += np.sum(LA.norm(tmp-g,axis=1))
 
         print distance_sum
+        iters += 1
         if abs(dist_old - distance_sum) < eps:
             print('Iters: {0}'.format(iters))
             break;
