@@ -1,11 +1,12 @@
 # built-in packages
 import os
 import time
+import collections
 
 # 3rd-party packages
 import mahotas as mh
 from mahotas.features import surf
-#import milk
+import milk
 import numpy as np
 from sklearn.cluster import KMeans
 
@@ -13,8 +14,9 @@ from sklearn.cluster import KMeans
 import kmeans
 
 # global vars
-SIZE_OF_CORPUS = 5000
+SIZE_OF_CORPUS = 2515
 NUM_OF_VISUAL = 10000
+MAX_SURF_POINTS = 100
 
 def append_photo_feats(fname,dataset):
     '''
@@ -28,7 +30,7 @@ def append_photo_feats(fname,dataset):
         n_feat: # of feats of the photo.
     '''
     f = mh.imread(fname,as_grey=True)
-    spoints = surf.surf(f, descriptor_only=True)
+    spoints = surf.surf(f, max_points=MAX_SURF_POINTS,descriptor_only=True)
     for feat in spoints.tolist():
         dataset.append(feat)
     return spoints.shape[0]
@@ -52,8 +54,8 @@ def execute():
     del dataset
     print("start kmeans.")
     t1=time.time()
-    labels = kmeans.kmeans(NUM_OF_VISUAL, dataset_m)
-    #labels, _ = milk.kmeans(dataset_m, NUM_OF_VISUAL)
+    #labels = kmeans.kmeans(NUM_OF_VISUAL, dataset_m)
+    labels, _ = milk.kmeans(dataset_m, NUM_OF_VISUAL)
     
     '''
     estimator = KMeans(n_clusters=NUM_OF_VISUAL)
@@ -69,12 +71,13 @@ def execute():
     for i in xrange(SIZE_OF_CORPUS):
         end = begin + feat_len_of_photos[i]
         freq = {}
-        for l in lables[begin:end] :
+        for l in labels[begin:end] :
             if l not in freq:
                 freq[l] = 0
             freq[l] += 1
-        with open((preifx+'visual').format(i+1),'w') as f:
-            for k,v in freq.items():
+        with open((prefix+'visual').format(i+1),'w') as f:
+            od = collections.OrderedDict(sorted(freq.items()))
+            for k,v in od.iteritems():
                 f.write('{0} {1}\n'.format(k,v))
         begin=end
 

@@ -38,7 +38,7 @@ def find_word_in_dict(word, wids):
 
 def gen_anno_word_id(dir_path):
     if not os.path.exists(dir_path+WORD_FNAME):
-        print(' ** anno_file "{0}" does not exist.'.format(anno_file)) 
+        print(' ** anno_file "{0}" does not exist.'.format(dir_path+WORD_FNAME)) 
         return
     with open(dir_path+WORD_FNAME,'r') as f_word, \
          open(dir_path+WID_FNAME, 'w')  as f_wid:
@@ -58,5 +58,5 @@ if __name__ == '__main__':
     check_argv()
     prefix = sys.argv[1]
     DICT_PATH = sys.argv[2]
-    for i in xrange(5000):    
+    for i in xrange(2515):    
         gen_anno_word_id((prefix+'/{0}/').format(i+1))
