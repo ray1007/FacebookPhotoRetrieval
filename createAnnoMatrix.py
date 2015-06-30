@@ -7,8 +7,8 @@ from numpy import linalg as LA
 
 
 numAnno   = 584429
-numViWord = 10000
-numFeat   = numAnno + numViWord
+#numViWord = 10000
+numFeat   = numAnno
 numPhoto  = 2515
 
 corpusDir="my_photo_corpus_uploaded"
@@ -21,12 +21,14 @@ def readDoc(docNum, A):
                 [speechID, wc] = line.split(' ')
                 [speechID, wc] = [int(speechID), float(wc)]
                 A[docNum-1, speechID-1] = wc
+    '''
     with open(docPrefix+'visual', 'r') as f:
         for line in f:
             [vwID, wc] = line.split(' ')
             [vwID, wc] = [int(vwID), int(wc)]
             A[docNum-1, numAnno+vwID-1] = wc
-            
+    '''       
+     
 def createMatrix(filename):
     dim=(numPhoto, numFeat)
     A = np.memmap(filename, dtype='float32', mode='w+', shape=dim)

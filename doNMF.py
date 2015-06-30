@@ -6,6 +6,7 @@ import pdb
 
 batch = 200
 WHname= 'WH'
+Vfname=None
 
 def print_usage(msg):
     usage = (
@@ -153,7 +154,6 @@ def nmf(V, config):
     print("In nmf.py.")
 
     # Initialize W & H.
-    Vfname  = 'nmf_a'
     #WHfname = 'WH.tmp'
     dimV = V.shape
     dimW = (V.shape[0], config.r)
@@ -200,6 +200,7 @@ if __name__ == "__main__":
     if len(argv) != 3: print_usage("Program takes 3 arg."); quit()
     d = int(argv[1])
     sparse_matrix = argv[2]
+    Vfname = sparse_matrix
     WHname = '{0}_WH_{1}.tmp'.format(sparse_matrix,d)
     config = nmf_config(d, 0.1, "euclidean", sparse_matrix)
     #config = nmf_config(90, 0.0000001, "klDiv")
